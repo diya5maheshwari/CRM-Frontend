@@ -1,19 +1,8 @@
-import { useState } from "react";
-
 export default function SidebarDrawer({ title, children }) {
-  const [open, setOpen] = useState(true);
-
   return (
-    <div className="mt-6">
-      <div
-        onClick={() => setOpen(!open)}
-        className="flex justify-between items-center px-2 py-2 cursor-pointer text-gray-400 text-xs font-semibold uppercase tracking-wide"
-      >
-        {title}
-        <span>{open ? "−" : "+"}</span>
-      </div>
-
-      {open && <div className="mt-2 space-y-2">{children}</div>}
+    <div className="px-4 mt-4">
+      <h2 className="text-xs text-gray-400 mb-2 uppercase">{title}</h2>
+      <div className="space-y-1">{children}</div>
     </div>
   );
 }
