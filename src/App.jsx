@@ -11,10 +11,10 @@ export default function App() {
     <div className="flex">
       <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col w-full">
         <Navbar setIsOpen={setIsOpen} />
         <Dashboard />
-        <Footer/>
+        <Footer />
       </div>
     </div>
   );
