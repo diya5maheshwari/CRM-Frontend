@@ -33,6 +33,7 @@ export default function Dashboard() {
         {/* RIGHT PANEL */}
         <RightPanel />
       </div>
+      
     </div>
   );
 }

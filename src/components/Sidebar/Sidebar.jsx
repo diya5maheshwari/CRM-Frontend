@@ -4,10 +4,10 @@ import { X } from "lucide-react";
 
 export default function Sidebar({ isOpen, setIsOpen }) {
   const menuItems = [
-    { title: "Dashboard", active: true },
-    { title: "New Lead" },
-    { title: "Add Remark" },
-    { title: "Profile" },
+    { title: "Dashboard", path: "/" },
+    { title: "New Lead", path: "/new-lead" },
+    { title: "Add Remark", path: "/add-remark" },
+    { title: "Profile", path: "/profile" },
   ];
 
   return (
@@ -28,11 +28,19 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       >
         {/* HEADER */}
         <div className="flex justify-between items-center p-4 border-b">
-          <div>
-            <img src={Logo} className="w-8 mb-1" />
-            <h1 className="text-sm font-semibold">Sales Intelligence</h1>
+          {/* LOGO + TEXT */}
+          <div className=" flex items-center gap-2">
+            <img src={Logo} alt="logo" className="w-16 h-13 object-contain" />
+
+            <div>
+              <h1 className="text-sm font-semibold text-gray-900">
+                Sales Intelligence
+              </h1>
+              <p className="text-xs text-gray-400">Luminescent Command</p>
+            </div>
           </div>
 
+          {/* CLOSE BUTTON */}
           <button onClick={() => setIsOpen(false)}>
             <X className="w-5 h-5 text-gray-600" />
           </button>
@@ -41,15 +49,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         {/* MENU */}
         <div className="p-4 space-y-2">
           {menuItems.map((item, i) => (
-            <SidebarItem key={i} title={item.title} active={item.active} />
+            <SidebarItem key={i} title={item.title} path={item.path} />
           ))}
-        </div>
-
-        {/* BUTTON */}
-        <div className="p-4 mt-auto">
-          <button className="w-full py-2 bg-blue-600 text-white rounded-lg">
-            + New Deal
-          </button>
         </div>
       </div>
     </>
