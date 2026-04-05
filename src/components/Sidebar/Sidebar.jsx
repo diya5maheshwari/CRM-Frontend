@@ -1,6 +1,8 @@
 import SidebarItem from "./SidebarItem";
 import Logo from "../../assets/logo.webp";
 import { X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Sidebar({ isOpen, setIsOpen }) {
   const menuItems = [
@@ -8,7 +10,9 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     { title: "New Lead", path: "/new-lead" },
     { title: "Add Remark", path: "/add-remark" },
     { title: "Profile", path: "/profile" },
+    { title: "My Leads", path: "/myLeads" },
   ];
+   const navigate = useNavigate();
 
   return (
     <>

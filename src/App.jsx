@@ -9,6 +9,7 @@ import NewLead from "./pages/NewLead";
 import AddRemark from "./pages/AddRemark";
 import Profile from "./pages/Profile";
 import Footer from "./components/Footer";
+import MyLeads from "./pages/MyLeads";
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +27,7 @@ export default function App() {
             <Route path="/new-lead" element={<NewLead />} />
             <Route path="/add-remark" element={<AddRemark />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/myLeads" element={<MyLeads />} />
           </Routes>
 
           <Footer/>
