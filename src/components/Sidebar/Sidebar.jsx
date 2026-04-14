@@ -6,11 +6,12 @@ import { useNavigate } from "react-router-dom";
 
 export default function Sidebar({ isOpen, setIsOpen }) {
   const menuItems = [
-    { title: "Dashboard", path: "/" },
+    { title: "Dashboard", path: "/dashboard" },
     { title: "New Lead", path: "/new-lead" },
     { title: "Add Remark", path: "/add-remark" },
     { title: "Profile", path: "/profile" },
     { title: "My Leads", path: "/myLeads" },
+    { title: "All Users", path: "/all-users" },
   ];
    const navigate = useNavigate();
 

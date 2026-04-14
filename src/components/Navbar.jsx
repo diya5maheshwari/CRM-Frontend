@@ -16,8 +16,17 @@ export default function Navbar({ setIsOpen }) {
 
   // Filter results
   const filteredData = data.filter((item) =>
-    item.toLowerCase().includes(search.toLowerCase())
+    item.toLowerCase().includes(search.toLowerCase()),
   );
+
+  //logout
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+
+    window.location.href = "/login"; // redirect
+  };
 
   // Handle click on result
   const handleSelect = (item) => {
@@ -31,10 +40,8 @@ export default function Navbar({ setIsOpen }) {
 
   return (
     <div className="w-full bg-white border-b border-gray-200 px-4 md:px-6 py-3 flex items-center justify-between">
-
       {/* LEFT */}
       <div className="flex items-center gap-3 w-full max-w-xl">
-
         {/* MENU BUTTON */}
         <button onClick={() => setIsOpen(true)}>
           <Menu className="w-6 h-6 text-gray-700" />
@@ -55,7 +62,6 @@ export default function Navbar({ setIsOpen }) {
           {/* DROPDOWN */}
           {(search || history.length > 0) && (
             <div className="absolute top-11 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-56 overflow-y-auto">
-
               {/* SEARCH RESULTS */}
               {search && (
                 <>
@@ -104,6 +110,12 @@ export default function Navbar({ setIsOpen }) {
 
       {/* RIGHT */}
       <div className="flex items-center gap-3 ml-4">
+        <button
+          onClick={handleLogout}
+          className="text-sm bg-red-500 text-white px-3 py-1 rounded"
+        >
+          Logout
+        </button>
         <div className="text-right hidden sm:block">
           <p className="text-sm font-medium text-gray-900">Alex Rivera</p>
           <p className="text-xs text-gray-400">Lead Specialist</p>

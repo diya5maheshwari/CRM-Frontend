@@ -1,29 +1,53 @@
+// export default function LeadsFilter({ filters, setFilters }) {
+//   return (
+//     <div className="flex gap-4 mb-4">
+//       {/* ROLE FILTER */}
+//       <select
+//         value={filters.status}
+//         onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+//       >
+//         <option value="">All</option>
+//         <option value="MATERIALIZED">Materialized</option>
+//         <option value="PROSPECTIVE">Prospective</option>
+//         <option value="PENDING">Pending</option>
+//       </select>
+
+//       {/* SEARCH */}
+//       <input
+//         type="text"
+//         placeholder="Search name..."
+//         className="border p-2 rounded"
+//         onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+//       />
+//     </div>
+//   );
+// }
+
+
 export default function LeadsFilter({ filters, setFilters }) {
   return (
-    <div className="flex flex-wrap gap-3 mb-4">
+    <div className="flex gap-4 mb-4">
 
-      {/* STATUS */}
       <select
         value={filters.status}
         onChange={(e) =>
           setFilters({ ...filters, status: e.target.value })
         }
-        className="border p-2 rounded-lg text-sm"
+        className="border p-2 rounded"
       >
-        <option value="">All Status</option>
-        <option value="New">New</option>
-        <option value="Prospective">Prospective</option>
-        <option value="Materialized">Materialized</option>
+        <option value="">All</option>
+        <option value="MATERIALIZED">Materialized</option>
+        <option value="PROSPECTIVE">Prospective</option>
+        <option value="PENDING">Pending</option>
       </select>
 
-      {/* DATE */}
       <input
-        type="date"
-        value={filters.date}
+        type="text"
+        placeholder="Search name..."
+        className="border p-2 rounded"
         onChange={(e) =>
-          setFilters({ ...filters, date: e.target.value })
+          setFilters({ ...filters, search: e.target.value })
         }
-        className="border p-2 rounded-lg text-sm"
       />
 
     </div>
