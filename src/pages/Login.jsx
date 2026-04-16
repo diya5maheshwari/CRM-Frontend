@@ -14,23 +14,44 @@ export default function Login() {
     if (token) navigate("/dashboard");
   }, []);
 
-  const handleLogin = async () => {
-    try {
-      const data = await loginUser(username, password);
-  //  console.log("Stored token:", data.jwt);
-      // console.log("FULL RESPONSE:", data);
+//   const handleLogin = async () => {
+//     try {
+//       const data = await loginUser(username, password);
+//   //  console.log("Stored token:", data.jwt);
+//       // console.log("FULL RESPONSE:", data);
 
-      localStorage.setItem("token", data.jwt);
-      localStorage.setItem("role", data.role);
+//       // localStorage.setItem("token", data.jwt);
+//       // localStorage.setItem("role", data.role);
 
-      // console.log("TOKEN:", data.jwt);
+// //       localStorage.setItem("token", data.jwt);
+// // localStorage.setItem("role", data.role[0]); // optional
 
-      navigate("/");
-    } catch (err) {
-      alert("Invalid credentials");
-    }
-  };
+//       // console.log("TOKEN:", data.jwt);
 
+//       navigate("/");
+//     } catch (err) {
+//       alert("Invalid credentials");
+//     }
+//   };
+
+
+const handleLogin = async () => {
+  try {
+    const data = await loginUser(username, password);
+
+    console.log("LOGIN RESPONSE:", data);
+
+    //  FIX
+    localStorage.setItem("token", data.jwt);
+    localStorage.setItem("role", data.role[0]);
+
+    navigate("/");
+
+  } catch (err) {
+    console.error(err);
+    alert("Login Failed");
+  }
+};
   return (
     <div className="h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-[360px]">

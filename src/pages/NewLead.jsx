@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { validateGST } from "../utils/validateGST";
+import { createLead } from "../services/api";
 
 export default function NewLead() {
-  const [createLead, setCreateLead] = useState(false);
+  const [isCreateLead, setIsCreateLead] = useState(false);
 
   const [form, setForm] = useState({
     companyName: "",
-    gst: "",
-    status: "Active",
+    gstNo: "",
+    status: "ACTIVE",
     contactPerson: "",
     designation: "",
-    phone: "",
-    email: "",
+    contactPhone: "",
+    contactEmail: "",
     address: "",
-    description: "",
+    goodsDescription: "",
     leadTitle: "",
     leadStatus: "New",
     followUpDate: "",
@@ -28,27 +29,93 @@ export default function NewLead() {
   const validate = () => {
     let err = {};
 
-    if (!form.companyName) err.companyName = "Required";
-    if (!validateGST(form.gst)) err.gst = "Invalid GST";
-    if (!/^[6-9]\d{9}$/.test(form.phone)) err.phone = "Invalid phone";
-    if (!/\S+@\S+\.\S+/.test(form.email)) err.email = "Invalid email";
+    // REQUIRED FIELDS
+    if (!form.companyName) err.companyName = "Company name required";
+
+    if (!validateGST(form.gstNo)) err.gstNo = "Invalid GST";
+
+    if (!form.contactPhone) {
+      err.contactPhone = "Phone required";
+    } else if (!/^[6-9]\d{9}$/.test(form.contactPhone)) {
+      err.contactPhone = "Invalid phone";
+    }
+
+    if (!form.contactEmail) {
+      err.contactEmail = "Email required";
+    } else if (!/\S+@\S+\.\S+/.test(form.contactEmail)) {
+      err.contactEmail = "Invalid email";
+    }
+
+    if (!form.address) err.address = "Address required";
+
+    if (!form.goodsDescription) err.goodsDescription = "Description required";
+    // CONDITIONAL VALIDATION
+    if (isCreateLead) {
+      if (!form.leadTitle) err.leadTitle = "Lead title required";
+      if (!form.followUpDate) err.followUpDate = "Follow-up date required";
+    }
 
     setErrors(err);
     return Object.keys(err).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log(form);
+
+    if (!validate()) return;
+
+    try {
+      // 🔹 BASE PAYLOAD (always send)
+      let payload = {
+        companyName: form.companyName,
+        gstNo: form.gstNo,
+        contactPerson: form.contactPerson,
+        designation: form.designation,
+        contactPhone: form.contactPhone,
+        contactEmail: form.contactEmail,
+        address: form.address,
+        goodsDescription: form.goodsDescription,
+        status: "ACTIVE",
+        callDuration: 0,
+      };
+
+      //  CONDITION: ONLY IF CHECKBOX SELECTED
+      if (isCreateLead) {
+        payload = {
+          ...payload,
+          leadTitle: form.leadTitle,
+          leadStatus: form.leadStatus,
+          nextFollowUpDate: form.followUpDate,
+        };
+      }
+
+      console.log("FINAL PAYLOAD:", payload);
+
+      await createLead(payload);
+
+      alert("Saved Successfully ");
+      setForm({
+        companyName: "",
+        gstNo: "",
+        status: "ACTIVE",
+        contactPerson: "",
+        designation: "",
+        contactPhone: "",
+        contactEmail: "",
+        address: "",
+        goodsDescription: "",
+        leadTitle: "",
+        leadStatus: "New",
+        followUpDate: "",
+      });
+    } catch (err) {
+      console.error(err);
+      alert("Failed ❌");
     }
   };
-
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
-
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow p-6">
-
         {/* TITLE */}
         <h2 className="text-xl font-semibold text-center mb-6">
           Add New Company
@@ -60,14 +127,12 @@ export default function NewLead() {
         </h3>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-
           {/* COMPANY NAME */}
           <div>
-            <label className="text-sm font-medium">
-              Company Name *
-            </label>
+            <label className="text-sm font-medium">Company Name *</label>
             <input
               name="companyName"
+               value={form.companyName}
               placeholder="Enter full company name"
               onChange={handleChange}
               className="w-full border rounded-lg p-2 mt-1"
@@ -80,12 +145,13 @@ export default function NewLead() {
             <div>
               <label className="text-sm">GST Number</label>
               <input
-                name="gst"
+                name="gstNo"
+                value={form.gstNo}
                 placeholder="22AAAAA0000A1Z5"
                 onChange={handleChange}
                 className="w-full border rounded-lg p-2 mt-1"
               />
-              <p className="text-red-500 text-xs">{errors.gst}</p>
+              <p className="text-red-500 text-xs">{errors.gstNo}</p>
             </div>
 
             <div>
@@ -107,6 +173,7 @@ export default function NewLead() {
               <label className="text-sm">Contact Person *</label>
               <input
                 name="contactPerson"
+                value={form.contactPerson}
                 placeholder="Full name"
                 onChange={handleChange}
                 className="w-full border rounded-lg p-2 mt-1"
@@ -117,6 +184,7 @@ export default function NewLead() {
               <label className="text-sm">Designation</label>
               <input
                 name="designation"
+                value={form.designation}
                 placeholder="e.g. Manager"
                 onChange={handleChange}
                 className="w-full border rounded-lg p-2 mt-1"
@@ -129,23 +197,25 @@ export default function NewLead() {
             <div>
               <label className="text-sm">Contact Phone *</label>
               <input
-                name="phone"
+                name="contactPhone"
+                value={form.contactPhone}
                 placeholder="10-digit number"
                 onChange={handleChange}
                 className="w-full border rounded-lg p-2 mt-1"
               />
-              <p className="text-red-500 text-xs">{errors.phone}</p>
+              <p className="text-red-500 text-xs">{errors.contactPhone}</p>
             </div>
 
             <div>
               <label className="text-sm">Contact Email</label>
               <input
-                name="email"
+                name="contactEmail"
+                value={form.contactEmail}
                 placeholder="email@example.com"
                 onChange={handleChange}
                 className="w-full border rounded-lg p-2 mt-1"
               />
-              <p className="text-red-500 text-xs">{errors.email}</p>
+              <p className="text-red-500 text-xs">{errors.contactEmail}</p>
             </div>
           </div>
 
@@ -154,6 +224,7 @@ export default function NewLead() {
             <label className="text-sm">Address *</label>
             <textarea
               name="address"
+              value={form.address}
               placeholder="Street, City, State, PIN"
               onChange={handleChange}
               className="w-full border rounded-lg p-2 mt-1"
@@ -162,15 +233,15 @@ export default function NewLead() {
 
           {/* DESCRIPTION */}
           <div>
-            <label className="text-sm">
-              Goods / Services Description *
-            </label>
+            <label className="text-sm">Goods / Services Description *</label>
             <textarea
-              name="description"
+              name="goodsDescription"
+              value={form.goodsDescription}
               placeholder="Describe company services..."
               onChange={handleChange}
               className="w-full border rounded-lg p-2 mt-1"
             />
+            <p className="text-red-500 text-xs">{errors.goodsDescription}</p>
           </div>
 
           {/* CHECKBOX */}
@@ -182,20 +253,20 @@ export default function NewLead() {
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
-                onChange={() => setCreateLead(!createLead)}
+                onChange={() => setIsCreateLead(!isCreateLead)}
               />
               Create the first lead for this company now
             </label>
           </div>
 
           {/* CONDITIONAL FIELDS */}
-          {createLead && (
+          {isCreateLead && (
             <div className="grid md:grid-cols-2 gap-4 mt-3">
-
               <div>
                 <label className="text-sm">Lead Title</label>
                 <input
                   name="leadTitle"
+                  value={form.leadTitle}
                   placeholder="Initial Inquiry"
                   onChange={handleChange}
                   className="w-full border rounded-lg p-2 mt-1"
@@ -219,6 +290,7 @@ export default function NewLead() {
                 <label className="text-sm">Next Follow-up Date</label>
                 <input
                   type="date"
+                  value={form.followUpDate}
                   name="followUpDate"
                   onChange={handleChange}
                   className="w-full border rounded-lg p-2 mt-1"
@@ -231,7 +303,6 @@ export default function NewLead() {
           <button className="w-full bg-blue-600 text-white py-2 rounded-lg mt-4">
             Save Company
           </button>
-
         </form>
       </div>
     </div>

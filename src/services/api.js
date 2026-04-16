@@ -10,11 +10,16 @@ export const loginUser = async (username, password) => {
     body: JSON.stringify({ username, password }),
   });
 
+  const data = await res.json();   // ✅ only once
+
+  console.log("LOGIN RESPONSE:", data);
+
   if (!res.ok) throw new Error("Login failed");
-  return res.json();
+
+  return data;
 };
 
-// 📊GET LEADS (ADMIN)
+// GET LEADS (ADMIN)
 export const getAdminLeads = async () => {
   const token = localStorage.getItem("token");
   // console.log("Sending token:", token);
@@ -29,7 +34,7 @@ export const getAdminLeads = async () => {
   return res.json();
 };
 
-// 📊 GET LEADS (EXECUTIVE - same for now)
+//  GET LEADS (EXECUTIVE - same for now)
 export const getExecutiveLeads = async () => {
   return getAdminLeads(); // later change API if needed
 };
@@ -57,10 +62,35 @@ export const getAdminDashboard = async () => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 
   if (!res.ok) throw new Error("Failed to fetch dashboard");
 
   return res.json();
+};
+
+export const createLead = async (formData) => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(
+    "https://crm-2umd.onrender.com/api/crm/companie/save", // ✅ fixed
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(formData),
+    },
+  );
+
+  const text = await res.text();
+  console.log("RAW RESPONSE:", text);
+
+  if (!res.ok) {
+    throw new Error("Failed to create lead");
+  }
+
+  return JSON.parse(text);
 };

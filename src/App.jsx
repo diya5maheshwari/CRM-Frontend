@@ -43,8 +43,6 @@
 //   );
 // }
 
-
-
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -56,9 +54,10 @@ import Dashboard from "./pages/Dashboard";
 import NewLead from "./pages/NewLead";
 import AddRemark from "./pages/AddRemark";
 import Profile from "./pages/Profile";
-import MyLeads from "./pages/MyLeads";
 import Login from "./pages/Login";
 import AllUsers from "./pages/AllUsers";
+import OrphanCompanies from "./pages/OrphanCompanies";
+import Leads from "./pages/Leads";
 
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -86,9 +85,17 @@ export default function App() {
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/new-lead" element={<NewLead />} />
                     <Route path="/add-remark" element={<AddRemark />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/myLeads" element={<MyLeads />} />
+                    <Route path="/profile" element={<Profile />} />{" "}
                     <Route path="/all-users" element={<AllUsers />} />
+                    <Route
+                      path="/orphan-companies"
+                      element={<OrphanCompanies />}
+                    />
+                    <Route path="/myLeads" element={<Leads type="my" />} />
+                    <Route
+                      path="/all-leads"
+                      element={<Leads type="all" />}
+                    />{" "}
                   </Routes>
 
                   <Footer />
