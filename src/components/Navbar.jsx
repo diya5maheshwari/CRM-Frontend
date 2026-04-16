@@ -1,9 +1,10 @@
-import { useState } from "react";
 import { Search, Menu } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Navbar({ setIsOpen }) {
   const [search, setSearch] = useState("");
   const [history, setHistory] = useState([]);
+  const [username, setUsername] = useState("");
 
   const data = [
     "Leads",
@@ -13,6 +14,13 @@ export default function Navbar({ setIsOpen }) {
     "Rahul Sharma",
     "Amit Verma",
   ];
+
+  useEffect(() => {
+    const user = getUserFromToken();
+    if (user) {
+      setUsername(user.sub); // 👈 यही username है
+    }
+  }, []);
 
   // Filter results
   const filteredData = data.filter((item) =>
@@ -37,6 +45,19 @@ export default function Navbar({ setIsOpen }) {
       setHistory([item, ...history.slice(0, 4)]); // max 5 items
     }
   };
+
+const getUserFromToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
 
   return (
     <div className="w-full bg-white border-b border-gray-200 px-4 md:px-6 py-3 flex items-center justify-between">
@@ -117,8 +138,8 @@ export default function Navbar({ setIsOpen }) {
           Logout
         </button>
         <div className="text-right hidden sm:block">
-          <p className="text-sm font-medium text-gray-900">Alex Rivera</p>
-          <p className="text-xs text-gray-400">Lead Specialist</p>
+          <h3 className="font-semibold">{username}</h3>
+          <p className="text-sm text-gray-500">Lead Specialist</p>
         </div>
 
         <div className="w-10 h-10 rounded-full overflow-hidden border">
