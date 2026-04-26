@@ -39,7 +39,7 @@ const handleLogin = async () => {
   try {
     const data = await loginUser(username, password);
 
-    console.log("LOGIN RESPONSE:", data);
+    // console.log("LOGIN RESPONSE:", data);
 
     //  FIX
     localStorage.setItem("token", data.jwt);

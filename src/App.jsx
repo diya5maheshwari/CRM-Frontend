@@ -58,6 +58,7 @@ import Login from "./pages/Login";
 import AllUsers from "./pages/AllUsers";
 import OrphanCompanies from "./pages/OrphanCompanies";
 import Leads from "./pages/Leads";
+// import AddRemark from "./pages/AddRemark";
 
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -96,8 +97,10 @@ export default function App() {
                       path="/all-leads"
                       element={<Leads type="all" />}
                     />{" "}
-                  </Routes>
 
+                                      <Route path="/lead/:id/remarks" element={<AddRemark />} />
+
+                  </Routes>
                   <Footer />
                 </div>
               </div>

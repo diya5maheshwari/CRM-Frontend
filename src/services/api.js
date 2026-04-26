@@ -10,9 +10,9 @@ export const loginUser = async (username, password) => {
     body: JSON.stringify({ username, password }),
   });
 
-  const data = await res.json();   // ✅ only once
+  const data = await res.json();   
 
-  console.log("LOGIN RESPONSE:", data);
+  // console.log("LOGIN RESPONSE:", data);
 
   if (!res.ok) throw new Error("Login failed");
 
@@ -86,7 +86,7 @@ export const createLead = async (formData) => {
   );
 
   const text = await res.text();
-  console.log("RAW RESPONSE:", text);
+  // console.log("RAW RESPONSE:", text);
 
   if (!res.ok) {
     throw new Error("Failed to create lead");
